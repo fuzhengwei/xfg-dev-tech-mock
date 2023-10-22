@@ -58,8 +58,9 @@ public class ZSXQAdapter implements IZSXQAdapter {
     }
 
     @Override
-    public void comment(long topicId, String content) {
+    public boolean comment(long topicId, String content) {
         zsxqApi.comment(topicId, content);
+        return true;
     }
 
 }

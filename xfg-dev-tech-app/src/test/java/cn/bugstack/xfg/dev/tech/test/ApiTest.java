@@ -25,8 +25,6 @@ public class ApiTest {
     @Test
     public void test_IAiReply() {
         aiReply.doAiReply();
-
-
     }
 
 }

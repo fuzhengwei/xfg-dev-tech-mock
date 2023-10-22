@@ -21,6 +21,7 @@ public class ReplyJob {
 
     @Scheduled(cron = "0/10 * * * * ?")
     public void exec() throws Exception {
+        log.info("自动回帖任务开始执行...");
         aiReply.doAiReply();
     }
 

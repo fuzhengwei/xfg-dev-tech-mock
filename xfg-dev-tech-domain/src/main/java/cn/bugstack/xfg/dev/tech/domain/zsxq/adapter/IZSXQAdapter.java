@@ -13,6 +13,6 @@ public interface IZSXQAdapter {
 
     List<TopicsItemVO> queryTopics();
 
-    void comment(long topicId, String content);
+    boolean comment(long topicId, String content);
 
 }

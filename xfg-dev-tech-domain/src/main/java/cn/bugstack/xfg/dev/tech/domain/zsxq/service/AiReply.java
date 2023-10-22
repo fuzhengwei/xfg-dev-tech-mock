@@ -38,7 +38,6 @@ public class AiReply implements IAiReply {
     @Value("${zsxq.config.user-id}")
     private Long userId;
 
-    private final String regex = "<e type=\"mention\" uid=\"(\\d+)\" title=\"(.*?)\" /> (.*)";
     private volatile Set<Long> topicIds = new HashSet<>();
 
     @Override
@@ -53,6 +52,7 @@ public class AiReply implements IAiReply {
             String text = topicsItem.getTalk();
 
             // "<e type="mention" uid="241858242255511" title="%40%E5%B0%8F%E5%82%85%E5%93%A5" /> 提问 java 冒泡排序"
+            String regex = "<e type=\"mention\" uid=\"(\\d+)\" title=\"(.*?)\" /> (.*)";
             Pattern pattern = Pattern.compile(regex);
             Matcher matcher = pattern.matcher(text);
 
@@ -65,7 +65,8 @@ public class AiReply implements IAiReply {
                 if (null == openAiSession) {
                     log.info("你没有开启 ChatGLM 参考yml配置文件来开启");
                     // 你可以使用 ChatGLM SDK 进行回答，回复问题；
-                    zsxqAdapter.comment(topicId, "【测试，只回答圈我的帖子】对接 ChatGLM SDK https://bugstack.cn/md/project/chatgpt/sdk/chatglm-sdk-java.html 回答：" + remainingText);
+                    boolean status = zsxqAdapter.comment(topicId, "【测试，只回答圈我的帖子】对接 ChatGLM SDK https://bugstack.cn/md/project/chatgpt/sdk/chatglm-sdk-java.html 回答：" + remainingText);
+                    log.info("回贴完成：{}", status);
                 } else {
                     log.info("ChatGLM 进入回答 {} {}", topicId, remainingText);
                     if (topicIds.contains(topicId)) {
@@ -94,12 +95,12 @@ public class AiReply implements IAiReply {
                             openAiSession.completions(request, new EventSourceListener() {
                                 @Override
                                 public void onEvent(EventSource eventSource, @Nullable String id, @Nullable String type, String data) {
-                                    ChatCompletionResponse chatCompletionResponse = com.alibaba.fastjson.JSON.parseObject(data, ChatCompletionResponse.class);
+                                    ChatCompletionResponse chatCompletionResponse = JSON.parseObject(data, ChatCompletionResponse.class);
                                     log.info("测试结果 onEvent：{}", chatCompletionResponse.getData());
                                     // type 消息类型，add 增量，finish 结束，error 错误，interrupted 中断
                                     if (EventType.finish.getCode().equals(type)) {
-                                        ChatCompletionResponse.Meta meta = com.alibaba.fastjson.JSON.parseObject(chatCompletionResponse.getMeta(), ChatCompletionResponse.Meta.class);
-                                        log.info("[输出结束] Tokens {}", com.alibaba.fastjson.JSON.toJSONString(meta));
+                                        ChatCompletionResponse.Meta meta = JSON.parseObject(chatCompletionResponse.getMeta(), ChatCompletionResponse.Meta.class);
+                                        log.info("[输出结束] Tokens {}", JSON.toJSONString(meta));
                                     }
                                     content.append(chatCompletionResponse.getData());
                                 }
@@ -121,7 +122,8 @@ public class AiReply implements IAiReply {
                                         }
 
                                         String subContent = contents.substring(startIndex, endIndex);
-                                        zsxqAdapter.comment(topicId, subContent);
+                                        boolean status = zsxqAdapter.comment(topicId, subContent);
+                                        log.info("回贴完成：{}", status);
 
                                         startIndex = endIndex;
                                         endIndex += maxLength;
