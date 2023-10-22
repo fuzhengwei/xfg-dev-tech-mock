@@ -1,0 +1,10 @@
+server:
+  port: 8091
+  application:
+    name: xfg-dev-tech-mock
+
+# 日志
+logging:
+  level:
+    root: info
+  config: classpath:logback-spring.xml
