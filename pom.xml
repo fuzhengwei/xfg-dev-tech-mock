@@ -53,6 +53,7 @@
                 <artifactId>converter-gson</artifactId>
                 <version>2.9.0</version>
             </dependency>
+            <!-- 下载后本地 idea 打开，右侧 maven 中点击 install https://github.com/fuzhengwei/chatglm-sdk-java -->
             <dependency>
                 <groupId>cn.bugstack</groupId>
                 <artifactId>chatglm-sdk-java</artifactId>
