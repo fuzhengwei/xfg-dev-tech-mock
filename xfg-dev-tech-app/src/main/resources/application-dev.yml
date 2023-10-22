@@ -2,6 +2,25 @@ server:
   port: 8091
   application:
     name: xfg-dev-tech-mock
+
+# ChatGLM SDK Config
+chatglm:
+  sdk:
+    config:
+      # 状态；true = 开启、false 关闭
+      enabled: true
+      # 官网地址
+      api-host: https://open.bigmodel.cn/
+      # 官网申请 https://open.bigmodel.cn/usercenter/apikeys
+      api-secret-key: d570f7c5d289cdac2abdfdc562e39f3f.trqz1dH8ZK6ED7Pg
+
+# 知识星球配置信息；id -> 星球ID、user-id -> 用户ID、cookie -> 登录cookie
+zsxq:
+  config:
+    id: 28885518425541
+    user-id: 241858242255511
+    cookie: zsxq_access_token=E0538FF2-B440-69E9-57D1-59EA37B9C0C6_9D76421394C6F474
+
 # 日志
 logging:
   level:
